@@ -53,6 +53,9 @@ fi
 if [[ ! -z "$MORPHEUS_MYSQL_MORPHEUS_DB_USER" ]]; then
   echo "mysql['morpheus_db_user'] = ${MORPHEUS_MYSQL_MORPHEUS_DB_USER}" >> /etc/morpheus/morpheus.rb
 fi
+if [[ ! -z "$MORPHEUS_MYSQL_MORPHEUS_PASSWORD" ]]; then
+  echo "mysql['morpheus_password'] = ${MORPHEUS_MYSQL_MORPHEUS_PASSWORD}" >> /etc/morpheus/morpheus.rb
+fi
 if [[ ! -z "$MORPHEUS_MYSQL_MORPHEUS_DB" ]]; then
   echo "mysql['morpheus_db'] = ${MORPHEUS_MYSQL_MORPHEUS_DB}" >> /etc/morpheus/morpheus.rb
 fi
