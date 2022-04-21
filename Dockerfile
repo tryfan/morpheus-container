@@ -24,6 +24,8 @@ RUN PKG_CONFIG=/usr/bin/pkg-config CPPFLAGS=-I/usr/local/include LDFLAGS=-L/usr/
   make install && \
   ldconfig
 
+RUN rm -rf /tmp/guacamole*
+
 RUN apt-get clean
 
 RUN mkdir /scripts
