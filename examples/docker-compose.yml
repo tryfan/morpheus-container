@@ -1,0 +1,59 @@
+version: "3"
+services:
+  es:
+    image: elasticsearch:7.17.0
+    container_name: es
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - <esdata_dir>:/usr/share/elasticsearch/data
+    networks:
+      - morphnet
+
+  mysql:
+    image: mysql:5.7
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=morphpass1
+      - MYSQL_DATABASE=morpheus
+      - MYSQL_INITDB_SKIP_TZINFO=true
+    volumes:
+      - <mysqldata_dir>:/var/lib/mysql
+    networks:
+      - morphnet
+
+  rmq:
+    image: rabbitmq:3.9
+    container_name: rmq
+    volumes:
+      - <rmqconfig_dir>/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - <rmqdata_dir>:/var/lib/rabbitmq
+    networks:
+      - morphnet
+
+  morpheus:
+    image: morpheuscontainer:latest
+    container_name: morpheus
+    environment:
+      - MORPHEUS_APPLIANCE_URL=https://192.168.88.27
+      - MORPHEUS_ELASTICSEARCH_ES_HOSTS={'es' => 9200}
+      - MORPHEUS_MYSQL_HOST={'mysql' => 3306}
+      - MORPHEUS_MYSQL_MORPHEUS_DB_USER=root
+      - MORPHEUS_MYSQL_MORPHEUS_DB=morpheus
+      - MORPHEUS_MYSQL_MORPHEUS_PASSWORD=morphpass1
+      - MORPHEUS_RABBITMQ_HOST=rmq
+      - MORPHEUS_RABBITMQ_VHOST=/
+      - MORPHEUS_RABBITMQ_QUEUE_USER=morpheus
+      - MORPHEUS_RABBITMQ_QUEUE_USER_PASSWORD=morphpass1
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - <morphdata_dir>:/var/opt/morpheus
+      - <morphlogs_dir>:/var/logs/morpheus
+    networks:
+      - morphnet
+
+networks:
+  morphnet: {}
