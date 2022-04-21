@@ -5,6 +5,7 @@ services:
     container_name: es
     environment:
       - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
     volumes:
       - <esdata_dir>:/usr/share/elasticsearch/data
     networks:
@@ -46,6 +47,7 @@ services:
       - MORPHEUS_RABBITMQ_VHOST=/
       - MORPHEUS_RABBITMQ_QUEUE_USER=morpheus
       - MORPHEUS_RABBITMQ_QUEUE_USER_PASSWORD=morphpass1
+      - MORPHEUS_UI_MAX_MEMORY_MB=3584
     ports:
       - 443:443
       - 80:80
