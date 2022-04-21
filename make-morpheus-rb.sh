@@ -110,5 +110,23 @@ fi
 if [[ ! -z "$MORPHEUS_RABBITMQ_USE_TLS" ]]; then
   echo "rabbitmq['use_tls'] = '${MORPHEUS_RABBITMQ_USE_TLS}'" >> /etc/morpheus/morpheus.rb
 fi
+if [[ ! -z "$MORPHEUS_UI_MAX_MEMORY_MB" ]]; then
+  echo "ui['max_memory_mb'] = '${MORPHEUS_UI_MAX_MEMORY_MB}'" >> /etc/morpheus/morpheus.rb
+fi
+if [[ ! -z "$MORPHEUS_UI_MEMORY_ALLOC_ARENA_MAX" ]]; then
+  echo "ui['memory_alloc_arena_max'] = '${MORPHEUS_UI_MEMORY_ALLOC_ARENA_MAX}'" >> /etc/morpheus/morpheus.rb
+fi
+if [[ ! -z "$MORPHEUS_UI_MEMORY_MAP_MAX" ]]; then
+  echo "ui['memory_map_max'] = '${MORPHEUS_UI_MEMORY_MAP_MAX}'" >> /etc/morpheus/morpheus.rb
+fi
+if [[ ! -z "$MORPHEUS_UI_MEMORY_MAP_THRESHOLD" ]]; then
+  echo "ui['memory_map_threshold'] = '${MORPHEUS_UI_MEMORY_MAP_THRESHOLD}'" >> /etc/morpheus/morpheus.rb
+fi
+if [[ ! -z "$MORPHEUS_UI_MEMORY_TOP_PAD" ]]; then
+  echo "ui['memory_top_pad'] = '${MORPHEUS_UI_MEMORY_TOP_PAD}'" >> /etc/morpheus/morpheus.rb
+fi
+if [[ ! -z "$MORPHEUS_UI_MEMORY_TRIM_THRESHOLD" ]]; then
+  echo "ui['memory_trim_threshold'] = '${MORPHEUS_UI_MEMORY_TRIM_THRESHOLD}'" >> /etc/morpheus/morpheus.rb
+fi
 
 echo "" >> /etc/morpheus/morpheus.rb
