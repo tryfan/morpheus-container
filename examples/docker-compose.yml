@@ -34,7 +34,7 @@ services:
       - morphnet
 
   morpheus:
-    image: morpheuscontainer:latest
+    image: ghcr.io/tryfan/morpheus:5.4.5-2
     container_name: morpheus
     environment:
       - MORPHEUS_APPLIANCE_URL=https://192.168.88.27
