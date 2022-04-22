@@ -1,8 +1,19 @@
 # Morpheus in Docker
 
+## Quickstart
+
+If you have Docker or Docker desktop installed on your machine, you can do the following to create a Morpheus environment:
+
+- Clone this repo
+- `cd morpheus-container/examples`
+- `docker-compose up -d`
+- In as little as 14 minutes, depending on system and internet connection speed, setup Morpheus at `https://localhost`
+
 ## Usage
 
-There is a sample `docker-compose.yml` in `examples/`.  Replace the data volume directories and the `MORPHEUS_APPLIANCE_URL` with the IP of your docker host.  The configured healthchecks will start up everything in order with `docker-compose up -d`.
+There is a sample `docker-compose.yml` in `examples/`.  This will work if you are running docker on your desktop.  Morpheus will be accessible at `https://localhost`.  Data will be stored in the directories in `examples/` and seems to take up about 4.4GB.  
+
+If you are running this on a docker host on another machine, replace `https://localhost` with `https://<IP of the docker host>`.  If you want the data directories outside `examples/` for a more permanent setup, replace the data volume directories in `docker-compose.yml`.  The configured healthchecks will start up everything in order with `docker-compose up -d`.
 
 If you are having trouble with one or more services starting up, you can try `docker-compose up -d es mysql rmq` and confirm a good startup on those before starting the morpheus container with: `docker-compose up -d morpheus`
 
