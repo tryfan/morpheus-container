@@ -2,7 +2,9 @@
 
 ## Usage
 
-There is a sample `docker-compose.yml` in `examples/`.  Replace the data volume directories and the `MORPHEUS_APPLIANCE_URL` with the IP of your docker host.  Start up the es, mysql, and rmq containers first, like so: `docker-compose up -d es mysql rmq` and confirm a good startup on those before starting the morpheus container with: `docker-compose up -d morpheus`
+There is a sample `docker-compose.yml` in `examples/`.  Replace the data volume directories and the `MORPHEUS_APPLIANCE_URL` with the IP of your docker host.  The configured healthchecks will start up everything in order with `docker-compose up -d`.
+
+If you are having trouble with one or more services starting up, you can try `docker-compose up -d es mysql rmq` and confirm a good startup on those before starting the morpheus container with: `docker-compose up -d morpheus`
 
 The example also contains what we think are sane minimums for a dev container of morpheus.  The total RAM usage for the docker host and containers seems to be just over 5GB.
 

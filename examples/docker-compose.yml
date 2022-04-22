@@ -8,6 +8,8 @@ services:
       - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
     volumes:
       - <esdata_dir>:/usr/share/elasticsearch/data
+    healthcheck:
+      test: curl -s -f es:9200/_cat/health >/dev/null || exit 1
     networks:
       - morphnet
 
@@ -21,6 +23,8 @@ services:
       - MYSQL_INITDB_SKIP_TZINFO=true
     volumes:
       - <mysqldata_dir>:/var/lib/mysql
+    healthcheck:
+      test: out=$$(mysqladmin ping -h localhost -P 3306 -u root --password=$$MYSQL_ROOT_PASSWORD 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
     networks:
       - morphnet
 
@@ -30,6 +34,8 @@ services:
     volumes:
       - <rmqconfig_dir>/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
       - <rmqdata_dir>:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics ping || exit 1
     networks:
       - morphnet
 
@@ -54,6 +60,14 @@ services:
     volumes:
       - <morphdata_dir>:/var/opt/morpheus
       - <morphlogs_dir>:/var/logs/morpheus
+    depends_on:
+      es:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      rmq:
+        condition: service_healthy
+
     networks:
       - morphnet
 
