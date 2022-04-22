@@ -7,7 +7,7 @@ services:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
     volumes:
-      - <esdata_dir>:/usr/share/elasticsearch/data
+      - ./esdata:/usr/share/elasticsearch/data
     healthcheck:
       test: curl -s -f es:9200/_cat/health >/dev/null || exit 1
     networks:
@@ -22,7 +22,7 @@ services:
       - MYSQL_DATABASE=morpheus
       - MYSQL_INITDB_SKIP_TZINFO=true
     volumes:
-      - <mysqldata_dir>:/var/lib/mysql
+      - ./mysqldata:/var/lib/mysql
     healthcheck:
       test: out=$$(mysqladmin ping -h localhost -P 3306 -u root --password=$$MYSQL_ROOT_PASSWORD 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
     networks:
@@ -32,8 +32,8 @@ services:
     image: rabbitmq:3.9
     container_name: rmq
     volumes:
-      - <rmqconfig_dir>/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-      - <rmqdata_dir>:/var/lib/rabbitmq
+      - ./rmqconfig/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rmqdata:/var/lib/rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics ping || exit 1
     networks:
@@ -43,7 +43,7 @@ services:
     image: ghcr.io/tryfan/morpheus:5.4.5-2
     container_name: morpheus
     environment:
-      - MORPHEUS_APPLIANCE_URL=https://192.168.88.27
+      - MORPHEUS_APPLIANCE_URL=https://localhost
       - MORPHEUS_ELASTICSEARCH_ES_HOSTS={'es' => 9200}
       - MORPHEUS_MYSQL_HOST={'mysql' => 3306}
       - MORPHEUS_MYSQL_MORPHEUS_DB_USER=root
@@ -58,8 +58,8 @@ services:
       - 443:443
       - 80:80
     volumes:
-      - <morphdata_dir>:/var/opt/morpheus
-      - <morphlogs_dir>:/var/logs/morpheus
+      - ./morphdata:/var/opt/morpheus
+      - ./morphlogs:/var/logs/morpheus
     depends_on:
       es:
         condition: service_healthy
