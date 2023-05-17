@@ -14,8 +14,8 @@ services:
       - morphnet
 
   mysql:
-    image: mysql:5.7
-    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    image: mysql:8
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=morphpass1
@@ -39,24 +39,31 @@ services:
     networks:
       - morphnet
 
+  guacd:
+    image: guacamole/guacd:1.5.1
+    container_name: guacd
+    networks:
+      - morphnet
+
   morpheus:
-    image: ghcr.io/tryfan/morpheus:5.4.5-2
+    image: ghcr.io/tryfan/morpheus:latest
     container_name: morpheus
     environment:
       - MORPHEUS_APPLIANCE_URL=https://localhost
       - MORPHEUS_ELASTICSEARCH_ES_HOSTS={'es' => 9200}
-      - MORPHEUS_MYSQL_HOST={'mysql' => 3306}
+      #- MORPHEUS_MYSQL_HOST={'mysql' => 3306}
       - MORPHEUS_MYSQL_MORPHEUS_DB_USER=root
       - MORPHEUS_MYSQL_MORPHEUS_DB=morpheus
       - MORPHEUS_MYSQL_MORPHEUS_PASSWORD=morphpass1
+      - MORPHEUS_MYSQL_MYSQL_URL_OVERIDE="jdbc:mysql://mysql:3306/morpheus?autoReconnect=true&useUnicode=true&characterEncoding=utf8&failOverReadOnly=false&useSSL=false&allowPublicKeyRetrieval=true"
       - MORPHEUS_RABBITMQ_HOST=rmq
       - MORPHEUS_RABBITMQ_VHOST=/
       - MORPHEUS_RABBITMQ_QUEUE_USER=morpheus
       - MORPHEUS_RABBITMQ_QUEUE_USER_PASSWORD=morphpass1
+      - MORPHEUS_UI_LOG_DIR=/var/logs/morpheus
       - MORPHEUS_UI_MAX_MEMORY_MB=3584
     ports:
       - 443:443
-      - 80:80
     volumes:
       - ./morphdata:/var/opt/morpheus
       - ./morphlogs:/var/logs/morpheus
@@ -67,7 +74,8 @@ services:
         condition: service_healthy
       rmq:
         condition: service_healthy
-
+    healthcheck:
+      test: curl -qk https://localhost/ping | grep "MORPHEUS PING"
     networks:
       - morphnet
 

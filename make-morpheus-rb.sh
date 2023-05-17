@@ -7,7 +7,7 @@ elasticsearch['enable'] = false
 mysql['enable'] = false
 rabbitmq['enable'] = false
 nginx['enable'] = true
-guacd['guacamole_enabled'] = true
+guacd['guacamole_enabled'] = false
 firewall['enabled'] = false
 " > /etc/morpheus/morpheus.rb
 
@@ -109,6 +109,9 @@ if [[ ! -z "$MORPHEUS_RABBITMQ_PORT" ]]; then
 fi
 if [[ ! -z "$MORPHEUS_RABBITMQ_USE_TLS" ]]; then
   echo "rabbitmq['use_tls'] = '${MORPHEUS_RABBITMQ_USE_TLS}'" >> /etc/morpheus/morpheus.rb
+fi
+if [[ ! -z "$MORPHEUS_UI_LOG_DIR" ]]; then
+  echo "ui['log_dir'] = '${MORPHEUS_UI_LOG_DIR}'" >> /etc/morpheus/morpheus.rb
 fi
 if [[ ! -z "$MORPHEUS_UI_MAX_MEMORY_MB" ]]; then
   echo "ui['max_memory_mb'] = '${MORPHEUS_UI_MAX_MEMORY_MB}'" >> /etc/morpheus/morpheus.rb
