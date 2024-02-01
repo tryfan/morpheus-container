@@ -1,20 +1,21 @@
 version: "3"
 services:
   es:
-    image: elasticsearch:7.17.0
+    image: elasticsearch:8.11.2
     container_name: es
     environment:
       - discovery.type=single-node
+      - ELASTIC_PASSWORD=elastic
       - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
     volumes:
       - ./esdata:/usr/share/elasticsearch/data
     healthcheck:
-      test: curl -s -f es:9200/_cat/health >/dev/null || exit 1
+      test: curl -u elastic:elastic -s -f es:9200/_cat/health >/dev/null || exit 1
     networks:
       - morphnet
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8
     command: --character-set-server=utf8 --collation-server=utf8_general_ci
     container_name: mysql
     environment:
@@ -29,7 +30,7 @@ services:
       - morphnet
 
   rmq:
-    image: rabbitmq:3.9
+    image: rabbitmq:3.12
     container_name: rmq
     volumes:
       - ./rmqconfig/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
@@ -40,11 +41,14 @@ services:
       - morphnet
 
   morpheus:
-    image: ghcr.io/tryfan/morpheus:5.4.5-2
+    image: morpheus:6.3.3-1
+    #image: ghcr.io/tryfan/morpheus:5.4.5-2
     container_name: morpheus
     environment:
       - MORPHEUS_APPLIANCE_URL=https://localhost
       - MORPHEUS_ELASTICSEARCH_ES_HOSTS={'es' => 9200}
+      - MORPHEUS_ELASTICSEARCH_AUTH_USER=elastic
+      - MORPHEUS_ELASTICSEARCH_AUTH_PASSWORD=elastic
       - MORPHEUS_MYSQL_HOST={'mysql' => 3306}
       - MORPHEUS_MYSQL_MORPHEUS_DB_USER=root
       - MORPHEUS_MYSQL_MORPHEUS_DB=morpheus

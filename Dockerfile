@@ -4,7 +4,7 @@ RUN apt-get update && \
   apt-get -y install wget sudo && \
   apt-get clean
 
-RUN wget -q -O /tmp/morpheus.deb https://downloads.morpheusdata.com/files/morpheus-appliance_5.4.5-1_amd64.deb && \
+RUN wget -q -O /tmp/morpheus.deb https://downloads.morpheusdata.com/files/morpheus-appliance_6.3.3-1_amd64.deb && \
   dpkg -i /tmp/morpheus.deb && \
   rm /tmp/morpheus.deb
 
